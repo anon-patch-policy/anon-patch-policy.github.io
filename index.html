@@ -297,8 +297,8 @@
     <nav id="vertical-nav">
         <a href="#intro" class="nav-dot active" data-target="intro"><span class="nav-label">Intro</span></a>
         <a href="#method" class="nav-dot" data-target="method"><span class="nav-label">Method</span></a>
-        <a href="#sim-environments" class="nav-dot" data-target="sim-environments"><span class="nav-label">Sim Environments</span></a>
         <a href="#real-robot" class="nav-dot" data-target="real-robot"><span class="nav-label">Real Robot</span></a>
+        <a href="#sim-environments" class="nav-dot" data-target="sim-environments"><span class="nav-label">Sim Environments</span></a>
     </nav>
 
     <nav class="navbar" role="navigation" aria-label="main navigation" id="nav">
@@ -315,8 +315,8 @@
         <div id="navMenu" class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item link is-info nav-link" href="#method"><span>Method</span></a>
-                <a class="navbar-item link is-info nav-link" href="#sim-environments"><span>Sim Environments</span></a>
                 <a class="navbar-item link is-info nav-link" href="#real-robot"><span>Real Robot</span></a>
+                <a class="navbar-item link is-info nav-link" href="#sim-environments"><span>Sim Environments</span></a>
             </div>
         </div>
     </nav>
@@ -399,258 +399,9 @@
                 </p>
             </div>
             <figure class="image block" style="max-width: 1100px; margin: 0 auto;">
-                <img src="static/img/method.png" alt="Patch Policy method overview">
+                <img src="static/img/method.png" alt="Patch Policy method overview"
+                    style="background-color: #fff; padding: 1.5rem; border-radius: 12px;">
             </figure>
-        </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- ===================== SIM ENVIRONMENTS ===================== -->
-    <div class="section" id="sim-environments">
-        <div class="container">
-            <div class="subtitle block">
-                <h2 class="hero-subtitle" style="margin-bottom: 20px;">Simulated Environments</h2>
-            </div>
-            <div class="content is-size-5 block">
-                <p>
-                    The videos directly below are samples of real rollouts from each of our four simulated environment suites. The
-                    subsections that follow compare how Patch Policy and the baseline policies perform on each task.
-                </p>
-            </div>
-
-            <!-- Row of 4 representative rollouts -->
-            <div class="block">
-                <div class="columns is-centered" id="sim-overview-row">
-                <div class="column is-3 has-text-centered">
-                    <figure class="image">
-                        <!-- REPLACE: Push-T rollout -->
-                        <video controls="" src="static/videos/rollout_videos/pusht.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                    </figure>
-                    <figcaption class="media-caption is-size-7 mt-2">Push-T</figcaption>
-                </div>
-                <div class="column is-3 has-text-centered">
-                    <figure class="image">
-                        <!-- REPLACE: Libero Goal rollout -->
-                        <video controls="" src="static/videos/rollout_videos/libero_goal.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                    </figure>
-                    <figcaption class="media-caption is-size-7 mt-2">Libero Goal</figcaption>
-                </div>
-                <div class="column is-3 has-text-centered">
-                    <figure class="image">
-                        <!-- REPLACE: BlockPush rollout -->
-                        <video controls="" src="static/videos/rollout_videos/blockpush.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                    </figure>
-                    <figcaption class="media-caption is-size-7 mt-2">BlockPush</figcaption>
-                </div>
-                <div class="column is-3 has-text-centered">
-                    <figure class="image">
-                        <!-- REPLACE: Cube rollout -->
-                        <video controls="" src="static/videos/rollout_videos/cube.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                    </figure>
-                    <figcaption class="media-caption is-size-7 mt-2">Cube</figcaption>
-                </div>
-            </div>
-            </div>
-
-            <hr class="divider">
-
-            <!-- Baselines comparison -->
-            <div id="sim-baselines">
-            <!-- ===== Push-T ===== -->
-            <div class="block">
-                <h4 class="title is-5" style="color: var(--nyu-purple);">Push-T</h4>
-                <div class="columns is-centered is-multiline">
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Push-T / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Push-T / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Push-T / Patch Policy VQ-BeT Web-SSL (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Push-T / VQ-BeT DINOv2 CLS token only -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Push-T / ACT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Push-T / OpenVLA-OFT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">OpenVLA-OFT</figcaption>
-                    </div>
-                </div>
-            </div>
-            <hr class="divider">
-
-            <!-- ===== Libero Goal ===== -->
-            <div class="block">
-                <h4 class="title is-5" style="color: var(--nyu-purple);">Libero Goal</h4>
-                <div class="columns is-centered is-multiline">
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Libero Goal / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Libero Goal / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Libero Goal / Patch Policy VQ-BeT Web-SSL (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Libero Goal / VQ-BeT DINOv2 CLS token only -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Libero Goal / ACT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
-                    </div>
-                    <!-- OpenVLA-OFT intentionally left blank for Libero Goal -->
-                    <div class="column is-2 has-text-centered"></div>
-                </div>
-            </div>
-            <hr class="divider">
-
-            <!-- ===== BlockPush ===== -->
-            <div class="block">
-                <h4 class="title is-5" style="color: var(--nyu-purple);">BlockPush</h4>
-                <div class="columns is-centered is-multiline">
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: BlockPush / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: BlockPush / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: BlockPush / Patch Policy VQ-BeT Web-SSL (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: BlockPush / VQ-BeT DINOv2 CLS token only -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: BlockPush / ACT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: BlockPush / OpenVLA-OFT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">OpenVLA-OFT</figcaption>
-                    </div>
-                </div>
-            </div>
-            <hr class="divider">
-
-            <!-- ===== Cube ===== -->
-            <div class="block">
-                <h4 class="title is-5" style="color: var(--nyu-purple);">Cube</h4>
-                <div class="columns is-centered is-multiline">
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Cube / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Cube / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Cube / Patch Policy VQ-BeT Web-SSL (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Cube / VQ-BeT DINOv2 CLS token only -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Cube / ACT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
-                    </div>
-                    <div class="column is-2 has-text-centered">
-                        <figure class="image">
-                            <!-- REPLACE: Cube / OpenVLA-OFT -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        </figure>
-                        <figcaption class="media-caption is-size-7 mt-2">OpenVLA-OFT</figcaption>
-                    </div>
-                </div>
-            </div>
-            </div>
         </div>
     </div>
 
@@ -663,11 +414,11 @@
                 <h2 class="hero-subtitle" style="margin-bottom: 20px;">Real Robot Environments</h2>
             </div>
 
-            <!-- Continuous plug/unplug demo -->
+            <!-- Continuous Plug/Unplug Demo -->
             <div class="block">
-                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Continuous plug/unplug demo</h3>
+                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Continuous Plug/Unplug Demo</h3>
                 <div class="columns is-centered">
-                    <div class="column is-10">
+                    <div class="column is-7">
                         <figure class="image">
                             <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" playsinline=""
                                 loop=""></video>
@@ -967,6 +718,256 @@
                         </figure>
                         <div class="carousel-dots" id="dots-task-2"></div>
                         <p class="hero-subtext has-text-centered mt-3" id="title-task-2"></p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ===================== SIM ENVIRONMENTS ===================== -->
+    <div class="section" id="sim-environments">
+        <div class="container">
+            <div class="subtitle block">
+                <h2 class="hero-subtitle" style="margin-bottom: 20px;">Simulated Environments</h2>
+            </div>
+            <div class="content is-size-5 block">
+                <p>
+                    The videos directly below are samples of real rollouts from each of our four simulated environment suites. The
+                    subsections that follow compare how Patch Policy and the baseline policies perform on each task.
+                </p>
+            </div>
+
+            <!-- Row of 4 representative rollouts -->
+            <div class="block">
+                <div class="columns is-centered" id="sim-overview-row">
+                <div class="column is-3 has-text-centered">
+                    <figure class="image">
+                        <!-- REPLACE: Push-T rollout -->
+                        <video controls="" src="static/videos/rollout_videos/pusht.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                    </figure>
+                    <figcaption class="media-caption is-size-7 mt-2">Push-T</figcaption>
+                </div>
+                <div class="column is-3 has-text-centered">
+                    <figure class="image">
+                        <!-- REPLACE: Libero Goal rollout -->
+                        <video controls="" src="static/videos/rollout_videos/libero_goal.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                    </figure>
+                    <figcaption class="media-caption is-size-7 mt-2">Libero Goal</figcaption>
+                </div>
+                <div class="column is-3 has-text-centered">
+                    <figure class="image">
+                        <!-- REPLACE: BlockPush rollout -->
+                        <video controls="" src="static/videos/rollout_videos/blockpush.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                    </figure>
+                    <figcaption class="media-caption is-size-7 mt-2">BlockPush</figcaption>
+                </div>
+                <div class="column is-3 has-text-centered">
+                    <figure class="image">
+                        <!-- REPLACE: Cube rollout -->
+                        <video controls="" src="static/videos/rollout_videos/cube.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                    </figure>
+                    <figcaption class="media-caption is-size-7 mt-2">Cube</figcaption>
+                </div>
+            </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Baselines comparison -->
+            <div id="sim-baselines">
+            <!-- ===== Push-T ===== -->
+            <div class="block">
+                <h4 class="title is-5" style="color: var(--nyu-purple);">Push-T</h4>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Push-T / Patch Policy VQ-BeT DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Push-T / Patch Policy DP DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Push-T / Patch Policy VQ-BeT Web-SSL (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Push-T / VQ-BeT DINOv2 CLS token only -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Push-T / ACT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Push-T / OpenVLA-OFT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">OpenVLA-OFT</figcaption>
+                    </div>
+                </div>
+            </div>
+            <hr class="divider">
+
+            <!-- ===== Libero Goal ===== -->
+            <div class="block">
+                <h4 class="title is-5" style="color: var(--nyu-purple);">Libero Goal</h4>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Libero Goal / Patch Policy VQ-BeT DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Libero Goal / Patch Policy DP DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Libero Goal / Patch Policy VQ-BeT Web-SSL (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Libero Goal / VQ-BeT DINOv2 CLS token only -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Libero Goal / ACT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
+                    </div>
+                    <!-- OpenVLA-OFT intentionally left blank for Libero Goal -->
+                    <div class="column is-2 has-text-centered"></div>
+                </div>
+            </div>
+            <hr class="divider">
+
+            <!-- ===== BlockPush ===== -->
+            <div class="block">
+                <h4 class="title is-5" style="color: var(--nyu-purple);">BlockPush</h4>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: BlockPush / Patch Policy VQ-BeT DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: BlockPush / Patch Policy DP DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: BlockPush / Patch Policy VQ-BeT Web-SSL (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: BlockPush / VQ-BeT DINOv2 CLS token only -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: BlockPush / ACT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: BlockPush / OpenVLA-OFT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">OpenVLA-OFT</figcaption>
+                    </div>
+                </div>
+            </div>
+            <hr class="divider">
+
+            <!-- ===== Cube ===== -->
+            <div class="block">
+                <h4 class="title is-5" style="color: var(--nyu-purple);">Cube</h4>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Cube / Patch Policy VQ-BeT DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Cube / Patch Policy DP DINOv2 (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Cube / Patch Policy VQ-BeT Web-SSL (Ours) -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT Web-SSL (Ours)</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Cube / VQ-BeT DINOv2 CLS token only -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">VQ-BeT DINOv2 CLS token only</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Cube / ACT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">ACT</figcaption>
+                    </div>
+                    <div class="column is-2 has-text-centered">
+                        <figure class="image">
+                            <!-- REPLACE: Cube / OpenVLA-OFT -->
+                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">OpenVLA-OFT</figcaption>
                     </div>
                 </div>
             </div>
