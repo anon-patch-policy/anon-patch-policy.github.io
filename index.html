@@ -4,7 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Patch Policy: a minimal architectural extension that enables transformer-based policies to consume dense pre-trained patch tokens directly without the computational overhead of a full VLM.">
     <title>Patch Policy</title>
     <link rel="stylesheet" href="static/css/bulma.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -39,6 +38,30 @@
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        /* Continuous demo: landscape + portrait clips shown side by side.
+           They can't match heights without squashing one, so we center them
+           vertically and let the portrait clip run a bit taller. */
+        .demo-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-video {
+            width: auto;
+            /* override the global video width:100% */
+            height: auto;
+            max-height: 340px;
+            max-width: 100%;
+            border-radius: 12px;
+        }
+
+        .demo-video.is-portrait {
+            max-height: 460px;
         }
 
         /* Override Bulma white backgrounds with cream */
@@ -336,7 +359,7 @@
                     <div class="columns is-centered">
                         <div class="column is-10">
                             <figure class="image">
-                                <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" playsinline=""
+                                <video src="static/videos/summary.mp4" controls="" muted="" autoplay="" playsinline=""
                                     loop=""></video>
                             </figure>
                         </div>
@@ -413,17 +436,69 @@
             <div class="subtitle block">
                 <h2 class="hero-subtitle" style="margin-bottom: 20px;">Real Robot Environments</h2>
             </div>
+            <div class="content is-size-5 block">
+                <p>
+                    We evaluate Patch Policy on three real-world manipulation tasks: cable insertion, pen collection,
+                    and tool hanging. The rollouts below show side-by-side executions for each task; the sections that
+                    follow break down success and failure cases against the baselines.
+                </p>
+            </div>
 
-            <!-- Continuous Plug/Unplug Demo -->
+            <!-- Real-robot rollouts slider (side-by-side) -->
+            <div class="block">
+                <div class="columns is-centered">
+                    <div class="column is-10">
+                        <figure class="image" style="position: relative;">
+                            <div class="carousel-wrapper" id="carousel-wrapper-rollouts">
+                                <div class="carousel-track" id="carousel-track-rollouts">
+                                    <div class="carousel-window active" data-index="0" data-title="Cable Insertion">
+                                        <div style="padding: 0.75rem;">
+                                            <figure class="image m-0">
+                                                <video src="static/videos/real/rollouts/cable.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-window" data-index="1" data-title="Pen Collection">
+                                        <div style="padding: 0.75rem;">
+                                            <figure class="image m-0">
+                                                <video src="static/videos/real/rollouts/pen.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-window" data-index="2" data-title="Tool Hanging">
+                                        <div style="padding: 0.75rem;">
+                                            <figure class="image m-0">
+                                                <video src="static/videos/real/rollouts/tool.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-overlay">
+                                <button class="carousel-btn" id="prev-btn-rollouts" style="margin-left: 10px;"><svg viewBox="0 0 512 512"><path d="M328 112L184 256l144 144"/></svg></button>
+                                <button class="carousel-btn" id="next-btn-rollouts" style="margin-right: 10px;"><svg viewBox="0 0 512 512"><path d="M184 112l144 144-144 144"/></svg></button>
+                            </div>
+                        </figure>
+                        <div class="carousel-dots" id="dots-rollouts"></div>
+                        <p class="hero-subtext has-text-centered mt-3" id="title-rollouts"></p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Continuous Plug/Unplug Demo (standard + wide, side by side, height-matched) -->
             <div class="block">
                 <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Continuous Plug/Unplug Demo (10x)</h3>
-                <div class="columns is-centered">
-                    <div class="column is-7">
-                        <figure class="image">
-                            <video src="static/videos/real_robot/Patch Policy Video/continuous_demo.mp4" controls="" muted="" autoplay="" playsinline=""
-                                loop=""></video>
-                        </figure>
-                    </div>
+                <div class="demo-row">
+                    <figure class="image" style="margin: 0;">
+                        <video class="demo-video" src="static/videos/real/demo/continuous.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <figcaption class="media-caption is-size-7 mt-2">Standard view</figcaption>
+                    </figure>
+                    <figure class="image" style="margin: 0;">
+                        <video class="demo-video is-portrait" src="static/videos/real/demo/continuous_wide.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <figcaption class="media-caption is-size-7 mt-2">Wide view</figcaption>
+                    </figure>
                 </div>
             </div>
 
@@ -445,14 +520,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / Patch Policy VQ-BeT DINOv2 (Ours) / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_suc_ours.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/ours_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / Patch Policy VQ-BeT DINOv2 (Ours) / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_fail_ours.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/ours_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -464,14 +539,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / VQ-BeT DINOv2 CLS token only / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_suc_cls.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/cls_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / VQ-BeT DINOv2 CLS token only / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_fail_cls.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/cls_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -483,14 +558,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / ACT / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_suc_act.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/act_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / ACT / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_fail_act.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/act_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -502,14 +577,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / OpenVLA-OFT / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_suc_vla.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/vla_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Cable Insertion / OpenVLA-OFT / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/cable_fail_vla.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/cable/vla_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -542,14 +617,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / Patch Policy VQ-BeT DINOv2 (Ours) / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_suc_ours.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/ours_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / Patch Policy VQ-BeT DINOv2 (Ours) / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_fail_ours.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/ours_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -561,14 +636,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / VQ-BeT DINOv2 CLS token only / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_suc_cls.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/cls_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / VQ-BeT DINOv2 CLS token only / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_fail_cls.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/cls_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -580,14 +655,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / ACT / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_suc_act.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/act_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / ACT / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_fail_act.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/act_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -599,14 +674,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / OpenVLA-OFT / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_suc_vla.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/vla_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Pen Collection / OpenVLA-OFT / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/pen_fail_vla.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/pen/vla_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -639,14 +714,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / Patch Policy VQ-BeT DINOv2 (Ours) / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_suc_ours.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/ours_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / Patch Policy VQ-BeT DINOv2 (Ours) / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_fail_ours.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/ours_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -658,14 +733,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / VQ-BeT DINOv2 CLS token only / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_suc_cls.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/cls_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / VQ-BeT DINOv2 CLS token only / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_fail_cls.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/cls_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -677,14 +752,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / ACT / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_suc_act.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/act_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / ACT / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_fail_act.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/act_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -696,14 +771,14 @@
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / OpenVLA-OFT / Success -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_suc_vla.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/vla_success.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Success</figcaption>
                                 </div>
                                 <div class="column is-6 has-text-centered" style="padding: 0 4px;">
                                     <figure class="image m-0">
                                         <!-- REPLACE: Tool Hanging / OpenVLA-OFT / Failure -->
-                                        <video src="static/videos/real_robot/Patch Policy Video/tool_fail_vla.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                                        <video src="static/videos/real/tool/vla_failure.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                                     </figure>
                                     <figcaption class="media-caption is-size-7 mt-2">Failure</figcaption>
                                 </div>
@@ -746,28 +821,28 @@
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: Push-T rollout -->
-                        <video controls="" src="static/videos/rollout_videos/pusht.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/pusht.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">Push-T</figcaption>
                 </div>
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: Libero Goal rollout -->
-                        <video controls="" src="static/videos/rollout_videos/libero_goal.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/libero_goal.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">Libero Goal</figcaption>
                 </div>
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: BlockPush rollout -->
-                        <video controls="" src="static/videos/rollout_videos/blockpush.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/blockpush.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">BlockPush</figcaption>
                 </div>
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: Cube rollout -->
-                        <video controls="" src="static/videos/rollout_videos/cube.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/cube.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">Cube</figcaption>
                 </div>
@@ -1044,8 +1119,8 @@
             requestAnimationFrame(() => go(0));
         }
 
-        // One slider per real-robot task (see #real-task-sliders markup).
-        ['task-0', 'task-1', 'task-2'].forEach(initSlider);
+        // Real-robot sliders: rollouts overview and one per task.
+        ['rollouts', 'task-0', 'task-1', 'task-2'].forEach(initSlider);
 
         // ---- Navbar burger toggle ----
         document.addEventListener('DOMContentLoaded', () => {
