@@ -40,30 +40,6 @@
             display: block;
         }
 
-        /* Continuous demo: landscape + portrait clips shown side by side.
-           They can't match heights without squashing one, so we center them
-           vertically and let the portrait clip run a bit taller. */
-        .demo-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .demo-video {
-            width: auto;
-            /* override the global video width:100% */
-            height: auto;
-            max-height: 340px;
-            max-width: 100%;
-            border-radius: 12px;
-        }
-
-        .demo-video.is-portrait {
-            max-height: 460px;
-        }
-
         /* Override Bulma white backgrounds with cream */
         .navbar,
         .navbar-menu,
@@ -487,18 +463,15 @@
 
             <hr class="divider">
 
-            <!-- Continuous Plug/Unplug Demo (standard + wide, side by side, height-matched) -->
+            <!-- Continuous Plug/Unplug Demo -->
             <div class="block">
-                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Continuous Plug/Unplug Demo (10x)</h3>
-                <div class="demo-row">
-                    <figure class="image" style="margin: 0;">
-                        <video class="demo-video" src="static/videos/real/demo/continuous.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        <figcaption class="media-caption is-size-7 mt-2">Standard view</figcaption>
-                    </figure>
-                    <figure class="image" style="margin: 0;">
-                        <video class="demo-video is-portrait" src="static/videos/real/demo/continuous_wide.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
-                        <figcaption class="media-caption is-size-7 mt-2">Wide view</figcaption>
-                    </figure>
+                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Continuous Plug/Unplug Demo (2x)</h3>
+                <div class="columns is-centered">
+                    <div class="column is-10">
+                        <figure class="image">
+                            <video src="static/videos/real/demo/new_demo_sidebyside_loop_2x.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                    </div>
                 </div>
             </div>
 
@@ -821,28 +794,28 @@
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: Push-T rollout -->
-                        <video controls="" src="static/videos/sim/pusht.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/rollouts/pusht.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">Push-T</figcaption>
                 </div>
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: Libero Goal rollout -->
-                        <video controls="" src="static/videos/sim/libero_goal.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/rollouts/libero_goal.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">Libero Goal</figcaption>
                 </div>
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: BlockPush rollout -->
-                        <video controls="" src="static/videos/sim/blockpush.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/rollouts/blockpush.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">BlockPush</figcaption>
                 </div>
                 <div class="column is-3 has-text-centered">
                     <figure class="image">
                         <!-- REPLACE: Cube rollout -->
-                        <video controls="" src="static/videos/sim/cube.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        <video controls="" src="static/videos/sim/rollouts/cube.mp4" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                     </figure>
                     <figcaption class="media-caption is-size-7 mt-2">Cube</figcaption>
                 </div>
@@ -860,14 +833,14 @@
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: Push-T / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/pusht/ours_vqbet_dinov2patch_pusht.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
                     </div>
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: Push-T / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/pusht/ours_diffusionpolicy_dinov2patch_pusht.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
                     </div>
@@ -910,14 +883,14 @@
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: Libero Goal / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/libero/ours_vqbet_dinov2patch_libero_task1.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
                     </div>
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: Libero Goal / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/libero/ours_diffusionpolicy_dinov2_libero_task1.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
                     </div>
@@ -955,14 +928,14 @@
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: BlockPush / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/blockpush/ours_vqbet_dinov2patch_blockpush.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
                     </div>
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: BlockPush / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/blockpush/ours_diffusionpolicy_dinov2patch_blockpush.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
                     </div>
@@ -1005,14 +978,14 @@
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: Cube / Patch Policy VQ-BeT DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/cube/ours_vqbet_dinov2patch_cube.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy VQ-BeT DINOv2 (Ours)</figcaption>
                     </div>
                     <div class="column is-2 has-text-centered">
                         <figure class="image">
                             <!-- REPLACE: Cube / Patch Policy DP DINOv2 (Ours) -->
-                            <video src="static/videos/placeholder.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                            <video src="static/videos/sim/cube/ours_diffusionpolicy_dinov2patch_cube.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
                         </figure>
                         <figcaption class="media-caption is-size-7 mt-2">Patch Policy DP DINOv2 (Ours)</figcaption>
                     </div>
