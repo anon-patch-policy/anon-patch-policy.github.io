@@ -272,6 +272,9 @@
         }
 
         /* Vertical Navbar */
+        /* The rail is fixed over the left margin, so only the dots themselves
+           may take pointer events -- otherwise its box sits on top of the page
+           and swallows text selection and clicks. */
         #vertical-nav {
             position: fixed;
             left: 20px;
@@ -281,6 +284,18 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            pointer-events: none;
+        }
+
+        /* Fade the rail down while the pointer is on it so it stops covering
+           what's underneath. The dot being pointed at stays solid, so the nav
+           is still readable and clickable. */
+        #vertical-nav:hover .nav-dot {
+            opacity: 0.15;
+        }
+
+        #vertical-nav:hover .nav-dot:hover {
+            opacity: 1;
         }
 
         .nav-dot {
@@ -291,6 +306,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            pointer-events: auto;
         }
 
         .nav-dot:hover,
@@ -315,8 +331,7 @@
             white-space: nowrap;
         }
 
-        .nav-dot:hover .nav-label,
-        .nav-dot.active .nav-label {
+        .nav-dot:hover .nav-label {
             opacity: 1;
             left: 25px;
         }
@@ -326,6 +341,119 @@
                 display: none;
             }
         }
+        /* ---- Data tables (per-stage, per-encoder, hyperparameters) ---- */
+        .table-block {
+            margin: 2rem 0 0;
+        }
+
+        .table-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--nyu-purple-dark);
+            margin-bottom: 0.35rem;
+        }
+
+        .table-note {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Hyperparameter tables are wide; let them scroll rather than squash.
+           The rounding lives here rather than on the table: `border-collapse:
+           collapse` means a radius on the table itself won't clip the header
+           cells, so the dark corners would render square. */
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.55rem 0.9rem;
+            text-align: left;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(87, 6, 140, 0.1);
+        }
+
+        .data-table thead th {
+            background-color: var(--nyu-purple-dark);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .data-table tbody tr:nth-child(even):not(.row-group) {
+            background-color: rgba(87, 6, 140, 0.035);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .data-table tr.row-group td {
+            background-color: rgba(87, 6, 140, 0.1);
+            color: var(--nyu-purple-dark);
+            font-weight: 700;
+        }
+
+        /* ---- Collapsible reference blocks (Implementation Details) ---- */
+        .accordion-item {
+            background-color: #fff;
+            border: 1px solid rgba(87, 6, 140, 0.12);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: none;
+            border: 0;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--nyu-purple-dark);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .accordion-header:hover {
+            background-color: rgba(87, 6, 140, 0.04);
+        }
+
+        .accordion-chevron {
+            flex: 0 0 auto;
+            transition: transform 0.25s ease;
+        }
+
+        .accordion-item.is-open .accordion-chevron {
+            transform: rotate(90deg);
+        }
+
+        .accordion-body {
+            display: none;
+            padding: 0 1.25rem 1.25rem;
+        }
+
+        .accordion-item.is-open .accordion-body {
+            display: block;
+        }
+
     </style>
 </head>
 
@@ -334,6 +462,7 @@
         <a href="#intro" class="nav-dot active" data-target="intro"><span class="nav-label">Intro</span></a>
         <a href="#method" class="nav-dot" data-target="method"><span class="nav-label">Method</span></a>
         <a href="#real-robot" class="nav-dot" data-target="real-robot"><span class="nav-label">Real Robot</span></a>
+        <a href="#zero-shot" class="nav-dot" data-target="zero-shot"><span class="nav-label">Zero-Shot</span></a>
         <a href="#sim-environments" class="nav-dot" data-target="sim-environments"><span class="nav-label">Sim Environments</span></a>
     </nav>
 
@@ -352,6 +481,7 @@
             <div class="navbar-start">
                 <a class="navbar-item link is-info nav-link" href="#method"><span>Method</span></a>
                 <a class="navbar-item link is-info nav-link" href="#real-robot"><span>Real Robot</span></a>
+                <a class="navbar-item link is-info nav-link" href="#zero-shot"><span>Zero-Shot</span></a>
                 <a class="navbar-item link is-info nav-link" href="#sim-environments"><span>Sim Environments</span></a>
             </div>
         </div>
@@ -387,29 +517,27 @@
                         <div class="is-size-5 block" id="abstract">
                             <h2 class="title is-4" style="color: var(--nyu-purple-dark);">Abstract</h2>
                             <p>
-                                Pretrained dense visual features from Vision Transformers (ViTs) are powerful yet have
-                                been underutilized in robot learning. Modern robot policies either compress each
-                                observation into a single global token, or rely on visual backbones trained from
-                                scratch, sacrificing both fine-grained spatial detail and the benefits of large-scale
-                                visual pre-training. While there exist policies that do operate on dense patch features
-                                like large vision-language-action models (VLAs), they tend to be heavy and slow,
-                                inheriting the full cost of a billion-parameter vision-language model (VLM) backbone. We
-                                close this gap with <strong>Patch Policy</strong>, a minimal architectural extension that
-                                enables transformer-based policies to consume dense pre-trained patch tokens directly
-                                without the computational overhead of a full VLM. At its core is a block-causal attention
-                                mask that preserves the temporal causality of standard policies while letting the model
-                                attend over many patch tokens per observation, alongside other state information.
-                            </p>
-                            <br>
-                            <p>
-                                <strong>Patch Policy</strong> is lightweight, fast, and highly effective. Across four
-                                simulated and three real-world environment suites, our method achieves a 40% relative
-                                improvement over policies using state-of-the-art global-pooled representations.
-                                Furthermore, it surpasses fine-tuned OpenVLA-OFT by 21% while using roughly 0.7% of the
-                                parameters. We believe <strong>Patch Policy</strong> provides a pipeline for the robotics
-                                community to readily leverage continuing progress in visual representation learning,
-                                without sacrificing the training efficiency or inference speed required for
-                                high-frequency, reactive control.
+                                Lightweight robot policies often compress pretrained visual features into global
+                                vectors, discarding spatial detail, while large vision-language-action models
+                                achieve strong performance at substantial computational cost. We introduce
+                                <strong>Patch Policy</strong> and show that simply feeding frozen Vision Transformer
+                                patch features into a small transformer policy achieves state-of-the-art performance
+                                on precise manipulation benchmarks with a fraction of the parameters of large
+                                vision-language-action models. Across four simulated and three real-world
+                                manipulation benchmarks, <strong>Patch Policy</strong> with a frozen ViT-S DINOv2
+                                encoder improves average normalized performance by 54% over the same policy using
+                                global CLS features and by 18% over OpenVLA-OFT, while using just 0.7% of
+                                OpenVLA-OFT&rsquo;s total parameters and achieving 11 ms inference latency on an
+                                H200 GPU. <strong>Patch Policy</strong> further demonstrates zero-shot
+                                generalization to unseen objects on one additional simulated and one real-world
+                                benchmark. Through controlled comparisons, we find that dense patch features
+                                improve precise manipulation, whereas the tested spatial compression methods
+                                consistently degrade performance. A study of five pretrained encoders reveals that
+                                visual representation strongly affects manipulation performance, with performance
+                                linked to the ease of extracting object position and orientation.
+                                <strong>Patch Policy</strong> provides an efficient approach to precise
+                                manipulation and a unified framework for studying how visual representations
+                                translate into closed-loop control.
                             </p>
                         </div>
                     </div>
@@ -516,8 +644,6 @@
                 </div>
             </div> -->
 
-            <hr class="divider">
-
             <!-- Slider-based real robot task sections -->
             <div id="real-task-sliders">
             <!-- ===== Cable Insertion ===== -->
@@ -615,6 +741,52 @@
                         <p class="hero-subtext has-text-centered mt-3" id="title-task-0"></p>
                     </div>
                 </div>
+            <div class="table-block">
+                <p class="table-title">Cable Insertion &mdash; Per-Stage Success Rates</p>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Visual Representation</th>
+                                <th>Policy</th>
+                                <th>Picked up cable</th>
+                                <th>Plugged into port</th>
+                                <th>Fully inserted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DINOv2 Patch</td>
+                                <td>VQ-BeT <strong>(Ours)</strong></td>
+                                <td><strong>1.00</strong></td>
+                                <td><strong>0.85</strong></td>
+                                <td><strong>0.70</strong></td>
+                            </tr>
+                            <tr>
+                                <td>DINOv2 CLS</td>
+                                <td>VQ-BeT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.70</td>
+                                <td>0.60</td>
+                            </tr>
+                            <tr>
+                                <td>ResNet-18 Patch</td>
+                                <td>ACT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.40</td>
+                                <td>0.35</td>
+                            </tr>
+                            <tr>
+                                <td>DINOv2+SigLIP Patch</td>
+                                <td>OpenVLA-OFT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.55</td>
+                                <td>0.30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             </div>
             <hr class="divider">
             <!-- ===== Pen Collection ===== -->
@@ -712,6 +884,52 @@
                         <p class="hero-subtext has-text-centered mt-3" id="title-task-1"></p>
                     </div>
                 </div>
+            <div class="table-block">
+                <p class="table-title">Pen Collection &mdash; Per-Stage Success Rates</p>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Visual Representation</th>
+                                <th>Policy</th>
+                                <th>First pen placed</th>
+                                <th>Second pen placed</th>
+                                <th>Third pen placed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DINOv2 Patch</td>
+                                <td>VQ-BeT <strong>(Ours)</strong></td>
+                                <td><strong>1.00</strong></td>
+                                <td><strong>1.00</strong></td>
+                                <td><strong>0.85</strong></td>
+                            </tr>
+                            <tr>
+                                <td>DINOv2 CLS</td>
+                                <td>VQ-BeT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.95</td>
+                                <td>0.65</td>
+                            </tr>
+                            <tr>
+                                <td>ResNet-18 Patch</td>
+                                <td>ACT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.85</td>
+                                <td>0.65</td>
+                            </tr>
+                            <tr>
+                                <td>DINOv2+SigLIP Patch</td>
+                                <td>OpenVLA-OFT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.85</td>
+                                <td>0.60</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             </div>
             <hr class="divider">
             <!-- ===== Tool Hanging ===== -->
@@ -809,7 +1027,204 @@
                         <p class="hero-subtext has-text-centered mt-3" id="title-task-2"></p>
                     </div>
                 </div>
+            <div class="table-block">
+                <p class="table-title">Tool Hanging &mdash; Per-Stage Success Rates</p>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Visual Representation</th>
+                                <th>Policy</th>
+                                <th>Picked up</th>
+                                <th>Reached hook</th>
+                                <th>Tool placed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DINOv2 Patch</td>
+                                <td>VQ-BeT <strong>(Ours)</strong></td>
+                                <td><strong>1.00</strong></td>
+                                <td><strong>0.90</strong></td>
+                                <td><strong>0.90</strong></td>
+                            </tr>
+                            <tr>
+                                <td>DINOv2 CLS</td>
+                                <td>VQ-BeT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.75</td>
+                                <td>0.70</td>
+                            </tr>
+                            <tr>
+                                <td>ResNet-18 Patch</td>
+                                <td>ACT</td>
+                                <td><strong>1.00</strong></td>
+                                <td>0.85</td>
+                                <td>0.85</td>
+                            </tr>
+                            <tr>
+                                <td>DINOv2+SigLIP Patch</td>
+                                <td>OpenVLA-OFT</td>
+                                <td>0.95</td>
+                                <td><strong>0.90</strong></td>
+                                <td>0.65</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ===================== ZERO-SHOT GENERALIZATION ===================== -->
+    <div class="section" id="zero-shot">
+        <div class="container">
+            <div class="subtitle block">
+                <h2 class="hero-subtitle" style="margin-bottom: 20px;">Zero-Shot Generalization</h2>
+            </div>
+            <div class="content is-size-5 block">
+                <p>
+                    We evaluate whether Patch Policy's gains transfer to zero-shot generalization: training on a
+                    large-scale pickup dataset and testing on unseen objects and environments never seen during
+                    training.
+                </p>
+            </div>
+
+            <!-- ===== CAP Training Dataset Samples ===== -->
+            <div class="block">
+                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">CAP Training Dataset Samples</h3>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/dataset/pickup.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Dataset Sample &ndash; Pickup</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/dataset/opening.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Dataset Sample &ndash; Opening</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/dataset/closing.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Dataset Sample &ndash; Closing</figcaption>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- ===== Real-World Object Pickup ===== -->
+            <div class="block">
+                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Real-World Object Pickup (5x)</h3>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/airpods_case.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Airpods Case (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/cable.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Cable (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/camera.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Camera (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/charger.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Charger (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/correction_fluid.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Correction Fluid (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/cup.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Cup (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/mini_hand_sanitizer.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Mini Hand Sanitizer (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/mouse.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Mouse (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/rubber_cement.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Rubber Cement (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/staple_remover.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Staple Remover (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/failure_early_grasp.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Early Grasp Failure (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/pickup/failure_overshoot.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Overshoot Failure (Ours)</figcaption>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- ===== EgoGym (Real-to-Sim) ===== -->
+            <div class="block">
+                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">EgoGym (Real-to-Sim)</h3>
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/egogym/pick.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Pickup (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/egogym/open.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Open (Ours)</figcaption>
+                    </div>
+                    <div class="column is-3 has-text-centered">
+                        <figure class="image m-0">
+                            <video src="static/videos/zeroshot/egogym/close.mp4" controls="" muted="" autoplay="" loop="" playsinline="" webkit-playsinline=""></video>
+                        </figure>
+                        <figcaption class="media-caption is-size-7 mt-2">Close (Ours)</figcaption>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -938,6 +1353,462 @@
                     </div>
                 </div>
             </div>
+
+            <hr class="divider">
+
+            <!-- ===== Encoder Comparison ===== -->
+            <div class="block" id="encoder-comparison">
+                <h3 class="title is-4" style="color: var(--nyu-purple-dark);">Encoder Comparison</h3>
+                <div class="content is-size-5">
+                    <p>
+                        Patch Policy is agnostic to the frozen backbone that produces its patch tokens. The tables
+                        below report the full per-encoder results, with standard deviations, for five pretrained
+                        visual encoders across our four simulated tasks.
+                    </p>
+                </div>
+                <div class="table-block">
+                    <p class="table-title">Effect of Pre-trained Visual Representations on PATCH POLICY&ndash;VQ-BeT</p>
+                    <p class="table-note">(Values within 2% of the maximum performance for each task are shown in bold.)</p>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Push-T</th>
+                                    <th>LIBERO Goal</th>
+                                    <th>BlockPush</th>
+                                    <th>Cube</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Ours &ndash; DINOv2</td>
+                                    <td><strong>0.69&plusmn;0.01</strong></td>
+                                    <td><strong>0.96&plusmn;0.01</strong></td>
+                                    <td>1.20&plusmn;0.23</td>
+                                    <td>1.35&plusmn;0.03</td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; DINOv3</td>
+                                    <td>0.65&plusmn;0.05</td>
+                                    <td><strong>0.95&plusmn;0.02</strong></td>
+                                    <td>0.96&plusmn;0.09</td>
+                                    <td>0.96&plusmn;0.04</td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; WebSSL</td>
+                                    <td><strong>0.68&plusmn;0.02</strong></td>
+                                    <td><strong>0.94&plusmn;0.01</strong></td>
+                                    <td><strong>1.68&plusmn;0.15</strong></td>
+                                    <td><strong>1.68&plusmn;0.02</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; V-JEPA2</td>
+                                    <td>0.65&plusmn;0.01</td>
+                                    <td>0.86&plusmn;0.03</td>
+                                    <td>1.46&plusmn;0.13</td>
+                                    <td>1.36&plusmn;0.03</td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; SigLIP2</td>
+                                    <td>0.51&plusmn;0.01</td>
+                                    <td>0.83&plusmn;0.01</td>
+                                    <td>0.99&plusmn;0.10</td>
+                                    <td>1.17&plusmn;0.03</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-block">
+                    <p class="table-title">Effect of Pre-trained Visual Representations on PATCH POLICY&ndash;Diffusion Policy</p>
+                    <p class="table-note">(Values within 2% of the maximum performance for each task are shown in bold.)</p>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Push-T</th>
+                                    <th>LIBERO Goal</th>
+                                    <th>BlockPush</th>
+                                    <th>Cube</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Ours &ndash; DINOv2</td>
+                                    <td><strong>0.81&plusmn;0.01</strong></td>
+                                    <td><strong>0.98&plusmn;0.00</strong></td>
+                                    <td>1.25&plusmn;0.08</td>
+                                    <td>1.24&plusmn;0.01</td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; DINOv3</td>
+                                    <td>0.73&plusmn;0.02</td>
+                                    <td>0.94&plusmn;0.01</td>
+                                    <td>1.22&plusmn;0.15</td>
+                                    <td>1.17&plusmn;0.03</td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; WebSSL</td>
+                                    <td><strong>0.80&plusmn;0.01</strong></td>
+                                    <td><strong>0.98&plusmn;0.00</strong></td>
+                                    <td><strong>1.65&plusmn;0.08</strong></td>
+                                    <td><strong>1.73&plusmn;0.02</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; V-JEPA2</td>
+                                    <td>0.72&plusmn;0.04</td>
+                                    <td>0.91&plusmn;0.01</td>
+                                    <td>1.60&plusmn;0.07</td>
+                                    <td>1.30&plusmn;0.05</td>
+                                </tr>
+                                <tr>
+                                    <td>Ours &ndash; SigLIP2</td>
+                                    <td>0.64&plusmn;0.02</td>
+                                    <td>0.83&plusmn;0.01</td>
+                                    <td>1.43&plusmn;0.06</td>
+                                    <td>1.23&plusmn;0.03</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ===================== IMPLEMENTATION DETAILS ===================== -->
+    <div class="section" id="implementation-details">
+        <div class="container">
+            <div class="subtitle block">
+                <h2 class="hero-subtitle" style="margin-bottom: 20px;">Implementation Details</h2>
+            </div>
+            <div class="content is-size-5 block">
+                <p>
+                    Full hyperparameters and training details for every environment and policy variant.
+                </p>
+            </div>
+
+            <div class="block">
+                <div class="accordion-item is-open">
+                    <button class="accordion-header" type="button" aria-expanded="true">
+                        <span>PATCH POLICY-VQ-BeT Hyperparameters</span>
+                        <svg class="accordion-chevron" viewBox="0 0 512 512" width="16" height="16" aria-hidden="true"><path d="M184 112l144 144-144 144" fill="none" stroke="currentColor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hyperparameter</th>
+                                        <th>Push-T</th>
+                                        <th>LIBERO Goal</th>
+                                        <th>BlockPush</th>
+                                        <th>Cube</th>
+                                        <th>Pickup</th>
+                                        <th>Open</th>
+                                        <th>Close</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="row-group"><td colspan="8">VQ-VAE Configuration</td></tr>
+                                    <tr>
+                                        <td>Latent Dimension</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Codebook Size</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Groups</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="8">Architecture</td></tr>
+                                    <tr>
+                                        <td>Number of Layers (N)</td>
+                                        <td>8</td>
+                                        <td>6</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Heads (nheads)</td>
+                                        <td>8</td>
+                                        <td>6</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Embedding Dimension (demb)</td>
+                                        <td>512</td>
+                                        <td>120</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="8">Policy</td></tr>
+                                    <tr>
+                                        <td>Window Size</td>
+                                        <td>5</td>
+                                        <td>10</td>
+                                        <td>3</td>
+                                        <td>5</td>
+                                        <td>3</td>
+                                        <td>3</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Action Window</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="8">Training</td></tr>
+                                    <tr>
+                                        <td>Learning Rate</td>
+                                        <td>5&times;10<sup>&minus;5</sup></td>
+                                        <td>5&times;10<sup>&minus;5</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>5&times;10<sup>&minus;5</sup></td>
+                                        <td>3&times;10<sup>&minus;4</sup></td>
+                                        <td>3&times;10<sup>&minus;4</sup></td>
+                                        <td>3&times;10<sup>&minus;4</sup></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Decay</td>
+                                        <td>2&times;10<sup>&minus;4</sup></td>
+                                        <td>2&times;10<sup>&minus;4</sup></td>
+                                        <td>0</td>
+                                        <td>2&times;10<sup>&minus;4</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Batch Size</td>
+                                        <td>8</td>
+                                        <td>32</td>
+                                        <td>32</td>
+                                        <td>128</td>
+                                        <td>256</td>
+                                        <td>256</td>
+                                        <td>256</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" type="button" aria-expanded="false">
+                        <span>PATCH POLICY-Real Robot VQ-BeT Hyperparameters</span>
+                        <svg class="accordion-chevron" viewBox="0 0 512 512" width="16" height="16" aria-hidden="true"><path d="M184 112l144 144-144 144" fill="none" stroke="currentColor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hyperparameter</th>
+                                        <th>Cable Insertion</th>
+                                        <th>Pen Collection</th>
+                                        <th>Tool Hanging</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="row-group"><td colspan="4">VQ-VAE Configuration</td></tr>
+                                    <tr>
+                                        <td>Latent Dimension</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                        <td>512</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Codebook Size</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                        <td>16</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Groups</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="4">Architecture</td></tr>
+                                    <tr>
+                                        <td>Number of Layers (N)</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Heads (nheads)</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Embedding Dimension (demb)</td>
+                                        <td>384</td>
+                                        <td>384</td>
+                                        <td>384</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="4">Policy</td></tr>
+                                    <tr>
+                                        <td>Window Size</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Action Window</td>
+                                        <td>10</td>
+                                        <td>5</td>
+                                        <td>5</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="4">Training</td></tr>
+                                    <tr>
+                                        <td>Learning Rate</td>
+                                        <td>3&times;10<sup>&minus;4</sup></td>
+                                        <td>3&times;10<sup>&minus;4</sup></td>
+                                        <td>3&times;10<sup>&minus;4</sup></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Decay</td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Batch Size</td>
+                                        <td>128</td>
+                                        <td>128</td>
+                                        <td>128</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" type="button" aria-expanded="false">
+                        <span>PATCH POLICY-Diffusion Policy Hyperparameters</span>
+                        <svg class="accordion-chevron" viewBox="0 0 512 512" width="16" height="16" aria-hidden="true"><path d="M184 112l144 144-144 144" fill="none" stroke="currentColor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hyperparameter</th>
+                                        <th>Push-T</th>
+                                        <th>LIBERO Goal</th>
+                                        <th>BlockPush</th>
+                                        <th>Cube</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="row-group"><td colspan="5">Architecture</td></tr>
+                                    <tr>
+                                        <td>Number of Layers (N)</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Heads (nheads)</td>
+                                        <td>4</td>
+                                        <td>4</td>
+                                        <td>8</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Embedding Dim (demb)</td>
+                                        <td>256</td>
+                                        <td>256</td>
+                                        <td>512</td>
+                                        <td>256</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="5">Policy</td></tr>
+                                    <tr>
+                                        <td>Observation Horizon</td>
+                                        <td>2</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Action Horizon</td>
+                                        <td>5</td>
+                                        <td>3</td>
+                                        <td>1</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr class="row-group"><td colspan="5">Training</td></tr>
+                                    <tr>
+                                        <td>Learning Rate</td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>5&times;10<sup>&minus;5</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                        <td>1&times;10<sup>&minus;4</sup></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Decay</td>
+                                        <td>0</td>
+                                        <td>2&times;10<sup>&minus;4</sup></td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Batch Size</td>
+                                        <td>256</td>
+                                        <td>256</td>
+                                        <td>256</td>
+                                        <td>256</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1012,6 +1883,15 @@
 
         // Real-robot sliders: rollouts overview and one per task.
         ['rollouts', 'task-0', 'task-1', 'task-2'].forEach(initSlider);
+
+        // ---- Implementation Details accordion ----
+        document.querySelectorAll('.accordion-header').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.accordion-item');
+                const open = item.classList.toggle('is-open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        });
 
         // ---- Navbar burger toggle ----
         document.addEventListener('DOMContentLoaded', () => {
