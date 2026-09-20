@@ -556,13 +556,17 @@
             </div>
             <div class="content is-size-5 block">
                 <p>
-                    In this work, we aim to give visuomotor policies direct access to the dense, spatially-rich features
-                    that large-scale Vision Transformer pre-training already provides. Instead of compressing each
-                    observation into a single global vector such as a pooled feature or a ViT CLS token, which discards
-                    the fine-grained detail needed for precise manipulation, Patch Policy feeds the full grid of patch
-                    features from a frozen, pretrained ViT to a lightweight transformer-based policy. A block-causal
-                    attention mask lets the model integrate spatial information within each frame while preserving
-                    temporal causality across frames.
+                    In this work, we aim to give visuomotor policies direct access to the dense, spatially-rich
+                    features that large-scale Vision Transformer pre-training already provides. Instead of compressing
+                    each observation into a single global vector such as a pooled feature or a ViT CLS token, which
+                    discards the fine-grained detail needed for precise manipulation, Patch Policy feeds the full grid
+                    of patch features from a frozen, pretrained ViT to a lightweight transformer-based policy. With
+                    VQ-BeT, the patch tokens pass through a block-causal self-attention mask, full attention within a
+                    frame and causal across frames, and the action head reads out the last patch token of each frame
+                    to predict a chunk of actions. With Diffusion Policy, a separate sequence of noisy action tokens
+                    attends to itself causally, then cross-attends to the patch tokens and a diffusion step token,
+                    masked so each action step always sees the step token but only sees patches from frames up through
+                    that step.
                 </p>
             </div>
             <figure class="image block" style="max-width: 1100px; margin: 0 auto;">
